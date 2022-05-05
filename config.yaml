@@ -1,2 +1,4 @@
 start_id: 0
 connect_db:
+path_file_count_id: count/count_id.txt
+logrus_level: debug

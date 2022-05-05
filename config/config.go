@@ -8,8 +8,9 @@ import (
 const yamlFile = "./config.yaml"
 
 type Config struct {
-	DnsDB            string `yaml:"connect_db"`
-	TokenTelegramBot string `yaml:"start_id"`
+	ConnectDb       string `yaml:"connect_db"`
+	StartId         string `yaml:"start_id"`
+	PathFileCountId string `yaml:"path_file_count_id"`
 }
 
 func NenConfig() (*Config, error) {
