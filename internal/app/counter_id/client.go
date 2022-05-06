@@ -1,31 +1,33 @@
 package counter_id
 
 import (
-	"fmt"
 	"io/ioutil"
 	"strconv"
 )
 
 type TextCounter interface {
 	SaveFile(id int) error
-	ReadFile(filePath string) (int, error)
+	readFile() error
 }
 
-type textCounter struct {
-	filePath string
-	indent   uint64
+type TextCounterStruct struct {
+	FilePath string
+	Indent   uint64
 }
 
 func NewtextCounter(filePath string, indent uint64) (TextCounter, error) {
-	return &textCounter{filePath, indent}, nil
+	counter := &TextCounterStruct{filePath, indent}
+	counter.readFile()
+
+	return counter, nil
 }
 
-func (t *textCounter) SaveFile(id int) error {
+func (t *TextCounterStruct) SaveFile(id int) error {
 	strId := strconv.Itoa(id)
 
 	var d = []byte(strId)
 
-	err := ioutil.WriteFile(t.filePath, d, 0666)
+	err := ioutil.WriteFile(t.FilePath, d, 0666)
 	if err != nil {
 		return err
 	}
@@ -33,17 +35,17 @@ func (t *textCounter) SaveFile(id int) error {
 	return nil
 }
 
-func (t *textCounter) ReadFile(filePath string) (int, error) {
-	f, err := ioutil.ReadFile(filePath)
+func (t *TextCounterStruct) readFile() error {
+	f, err := ioutil.ReadFile(t.FilePath)
 	if err != nil {
-		fmt.Println("read fail", err)
+		return err
 	}
 
-	lastId, err := strconv.Atoi(string(f))
+	lastId, err := strconv.ParseUint(string(f), 10, 64)
 
 	if err != nil {
-		return 0, err
+		return err
 	}
-
-	return lastId, nil
+	t.Indent = lastId
+	return nil
 }
