@@ -13,17 +13,11 @@ type TextCounter interface {
 
 type textCounter struct {
 	filePath string
-	lastId   int
+	indent   uint64
 }
 
-func NewtextCounter(filePath string, lastIdStr string) (TextCounter, error) {
-	lastId, err := strconv.Atoi(lastIdStr)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return &textCounter{filePath, lastId}, nil
+func NewtextCounter(filePath string, indent uint64) (TextCounter, error) {
+	return &textCounter{filePath, indent}, nil
 }
 
 func (t *textCounter) SaveFile(id int) error {
